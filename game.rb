@@ -14,7 +14,7 @@ class Player < Chingu::GameObject
 
 	#meta-constructor
 	def setup
-		@x, @y = 350, 400
+		@x, @y = 750, 400
 		@image = Gosu::Image["ship.png"]
 		self.input = {
 			holding_left: :left,
@@ -25,21 +25,28 @@ class Player < Chingu::GameObject
 	end
 
 	def left
-		@x -= 1
+		unless @x - 28 <= 0
+			@x -= 1
+		end
 	end
 
 	def right
-		@x += 1
+		unless @x + 28 >= 800
+			@x += 1
+		end
 	end
 
 	def up 
-		@y -= 1
+		unless @y - 28 <= 0
+			@y -= 1
+		end
 	end
 
 	def down
-		@y += 1
+		unless @y + 28 >= 600
+			@y += 1
+		end
 	end
-
 end
 
 Game.new.show
