@@ -7,6 +7,8 @@ class Game < Chingu::Window
 		super
 		self.input = {esc: :exit}
 		@player = Player.create
+		@targets = []
+		5.times { @targets << Target.create}
 	end
 end
 
@@ -62,7 +64,15 @@ class Laser < Chingu::GameObject
 		@image = Gosu::Image["laser.png"]
 		self.velocity_y = -10
 	end
+end
 
+class Target < Chingu::GameObject
+
+	def setup
+		@x = rand(800)
+		@y = 100
+		@image = Gosu::Image["target.png"]
+	end
 end
 
 Game.new.show
