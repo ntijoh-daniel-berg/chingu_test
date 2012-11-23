@@ -21,7 +21,8 @@ class Player < Chingu::GameObject
 			holding_left: :left,
 			holding_right: :right,
 			holding_up: :up,
-			holding_down: :down
+			holding_down: :down,
+			space: :fire
 		}
 	end
 
@@ -48,6 +49,20 @@ class Player < Chingu::GameObject
 			@y += @speed
 		end
 	end
+
+	def fire
+		Laser.create(x: self.x, y: self.y)
+	end
+end
+
+class Laser < Chingu::GameObject
+	has_traits :velocity
+
+	def setup
+		@image = Gosu::Image["laser.png"]
+		self.velocity_y = -10
+	end
+
 end
 
 Game.new.show
