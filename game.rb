@@ -16,6 +16,7 @@ class Player < Chingu::GameObject
 	def setup
 		@x, @y = 750, 400
 		@image = Gosu::Image["ship.png"]
+		@speed = 4
 		self.input = {
 			holding_left: :left,
 			holding_right: :right,
@@ -26,25 +27,25 @@ class Player < Chingu::GameObject
 
 	def left
 		unless @x - 28 <= 0
-			@x -= 1
+			@x -= @speed
 		end
 	end
 
 	def right
 		unless @x + 28 >= 800
-			@x += 1
+			@x += @speed
 		end
 	end
 
 	def up 
 		unless @y - 28 <= 0
-			@y -= 1
+			@y -= @speed
 		end
 	end
 
 	def down
 		unless @y + 28 >= 600
-			@y += 1
+			@y += @speed
 		end
 	end
 end
