@@ -22,42 +22,38 @@ end
 
 class Player < Chingu::GameObject
 
+	has_traits :velocity
+
 	#meta-constructor
 	def setup
 		@x, @y = 750, 400
 		@image = Gosu::Image["ship.png"]
-		@speed = 4
+		@velocity_x = 0
+		@velocity_y = 0
 		self.input = {
-			holding_left: :left,
-			holding_right: :right,
-			holding_up: :up,
-			holding_down: :down,
+			holding_left: :turn_left,
+			holding_right: :turn_right,
+			holding_up: :accelerate,
 			holding_space: :fire
 		}
 	end
 
-	def left
-		unless @x - 28 <= 0
-			@x -= @speed
-		end
+	def turn_left
+		@angle -= 4.5
 	end
 
-	def right
-		unless @x + 28 >= 800
-			@x += @speed
-		end
+	def turn_right
+		@angle += 4.5
 	end
 
-	def up 
-		unless @y - 28 <= 0
-			@y -= @speed
-		end
+	def accelerate 
+		@velocity_x += Gosu::offset_x(@angle, 0.5)
+		@velocity_y += Gosu::offset_y(@angle, 0.5)
 	end
 
-	def down
-		unless @y + 28 >= 600
-			@y += @speed
-		end
+	def update
+		@velocity_x *= 0.95
+		@velocity_y *= 0.95
 	end
 
 	def fire
