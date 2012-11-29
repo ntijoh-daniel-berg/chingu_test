@@ -6,19 +6,18 @@ class Game < Chingu::Window
 	def initialize
 		super
 		self.input = {esc: :exit}
+		Background.create
 		@player = Player.create
-		@targets = []
-		5.times { @targets << Target.create}
+		5.times { Asteroid.create}
 	end
 
 	def update
 		super
-		Laser.each_bounding_circle_collision(Target) do |laser, target|
+		Laser.each_bounding_circle_collision(Asteroid) do |laser, target|
       		laser.destroy
       		target.destroy
     	end
 	end
-
 end
 
 class Player < Chingu::GameObject
@@ -33,7 +32,7 @@ class Player < Chingu::GameObject
 			holding_right: :right,
 			holding_up: :up,
 			holding_down: :down,
-			space: :fire
+			holding_space: :fire
 		}
 	end
 
@@ -67,23 +66,44 @@ class Player < Chingu::GameObject
 end
 
 class Laser < Chingu::GameObject
-	has_traits :velocity, :collision_detection, :bounding_circle
+	has_traits :velocity, :collision_detection, :bounding_circle, :timer
 
 	def setup
 		@image = Gosu::Image["laser.png"]
 		self.velocity_y = -10
 		Gosu::Sound["pew-pew.wav"].play
+		after(300) do
+			self.destroy
+		end
 	end
 end
 
-class Target < Chingu::GameObject
-	has_traits :collision_detection, :bounding_circle
+class Background < Chingu::GameObject
+
+	def setup
+		@x, @y = 400,300
+		@image = Gosu::Image["paper.jpg"]
+	end
+
+end
+
+class Asteroid < Chingu::GameObject
+	has_traits :collision_detection, :bounding_circle, :velocity
 
 	def setup
 		@x = rand(800)
 		@y = 100
-		@image = Gosu::Image["target.png"]
+		@rotation = rand()
+		@velocity_y = rand()
+		@velocity_x = rand()
+		@image = Gosu::Image["asteroid#{rand(4)}.png"]
 	end
+
+	def update
+		super
+		@angle += @rotation
+	end
+
 end
 
 Game.new.show
