@@ -97,6 +97,9 @@ class Asteroid < Chingu::GameObject
 
 	def update
 		super
+		if @x - self.width > $window.width
+			@x = -self.width
+		end
 		@angle += @rotation
 	end
 
